@@ -1,0 +1,70 @@
+<%- include('includes/_header', { title: 'Edit Drug' }) %>
+
+    <main id="main" style="display:flex; justify-content:center; align-items:center; min-height:80vh; background:#f9f9f9;">
+        <div style="
+        width:450px; 
+        background:#fff; 
+        padding:25px 30px; 
+        border-radius:10px; 
+        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    ">
+            <a href="/manage" style="text-decoration:none; color:#007bff; font-size:14px; display:inline-block; margin-bottom:10px;">
+                <i class="fas fa-arrow-left"></i> All Drugs
+            </a>
+
+            <h2 style="text-align:center; margin-bottom:5px; color:#28a745;">✏️ Edit
+                <%= drug.name %>
+            </h2>
+            <p style="text-align:center; margin-bottom:20px; color:#555; font-size:14px;">
+                Use the form below to update <strong><%= drug.name %></strong>.
+            </p>
+
+            <!-- Update form -->
+            <form method="POST" action="/drugs/<%= drug._id %>?_method=PUT" style="display:flex; flex-direction:column; gap:15px;">
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Drug Name</label>
+                    <input type="text" id="name" name="name" value="<%= drug.name %>" minlength="6" required placeholder="Drug Name" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Tablets / Card</label>
+                    <input type="number" id="card" name="card" value="<%= drug.card %>" min="1001" max="100000" required placeholder="≥ 1001" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Tablets / Pack</label>
+                    <input type="number" id="pack" name="pack" value="<%= drug.pack %>" min="1" max="100000" required placeholder="e.g., 10" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Taken / Day</label>
+                    <input type="number" id="perDay" name="perDay" value="<%= drug.perDay %>" min="1" max="89" required placeholder="1 - 89" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Dosage</label>
+                    <input type="text" id="dosage" name="dosage" value="<%= drug.dosage %>" placeholder="02-morning,01-afternoon,00-night" pattern="^\d+-morning,\d+-afternoon,\d+-night$" required style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                    <small style="color:#666; font-size:12px; margin-top:4px;">
+                    Format: <code>02-morning,01-afternoon,00-night</code>
+                </small>
+                </div>
+
+                <button type="submit" style="
+                background:#28a745; 
+                color:#fff; 
+                padding:10px; 
+                border:none; 
+                border-radius:6px; 
+                font-size:15px; 
+                font-weight:500;
+                cursor:pointer;
+                transition:0.2s;
+            ">
+                💾 Save Changes
+            </button>
+            </form>
+        </div>
+    </main>
+
+    <%- include('includes/_footer') %>

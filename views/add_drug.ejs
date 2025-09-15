@@ -1,0 +1,61 @@
+<%- include('includes/_header', { title: 'Add Drug' }) %>
+
+    <main id="main" style="display:flex; justify-content:center; align-items:center; min-height:80vh; background:#f9f9f9;">
+        <div style="
+        width:420px; 
+        background:#fff; 
+        padding:25px 30px; 
+        border-radius:10px; 
+        box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    ">
+            <h2 style="text-align:center; margin-bottom:20px; color:#007bff;">➕ Add New Drug</h2>
+
+            <!-- Form gửi về /add-drug -->
+            <form method="POST" action="/add-drug" style="display:flex; flex-direction:column; gap:15px;">
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Name</label>
+                    <input type="text" name="name" minlength="6" required placeholder="e.g., Paracetamol" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Tablets / Card</label>
+                    <input type="number" name="card" min="1001" required placeholder="≥ 1001" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Tablets / Pack</label>
+                    <input type="number" name="pack" min="1" required placeholder="e.g., 10" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Taken / Day</label>
+                    <input type="number" name="perDay" min="1" max="89" required placeholder="1 - 89" style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                </div>
+
+                <div style="display:flex; flex-direction:column;">
+                    <label style="margin-bottom:5px; font-weight:500;">Dosage</label>
+                    <input type="text" name="dosage" placeholder="02-morning,01-afternoon,00-night" pattern="^\d+-morning,\d+-afternoon,\d+-night$" required style="padding:8px; border:1px solid #ccc; border-radius:6px;">
+                    <small style="color:#666; font-size:12px; margin-top:4px;">
+                    Format: <code>02-morning,01-afternoon,00-night</code>
+                </small>
+                </div>
+
+                <button type="submit" style="
+                background:#28a745; 
+                color:#fff; 
+                padding:10px; 
+                border:none; 
+                border-radius:6px; 
+                font-size:15px; 
+                font-weight:500;
+                cursor:pointer;
+                transition:0.2s;
+            ">
+                💾 Save
+            </button>
+            </form>
+        </div>
+    </main>
+
+    <%- include('includes/_footer') %>

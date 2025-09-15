@@ -1,0 +1,119 @@
+<!-- header -->
+<%- include('includes/_header', { title: 'Manage Drugs' }) %>
+
+    <main id="main" style="padding:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2 style="margin:0;">📋 Danh sách Thuốc</h2>
+            <a href="/add-drug">
+                <button id="new" style="
+                background:#28a745; 
+                color:#fff; 
+                padding:10px 18px; 
+                border:none; 
+                border-radius:6px; 
+                font-size:14px;
+                cursor:pointer;
+            ">
+                <i class="fas fa-plus"></i> New Drug
+            </button>
+            </a>
+        </div>
+
+        <table style="
+        width:100%; 
+        border-collapse:collapse; 
+        background:#fff; 
+        box-shadow:0 2px 6px rgba(0,0,0,0.1);
+        border-radius:8px; 
+        overflow:hidden;
+    ">
+            <thead style="background:#007bff; color:white;">
+                <tr>
+                    <th style="padding:12px;">#</th>
+                    <th>Drug Name</th>
+                    <th>Tablets / Card</th>
+                    <th>Tablets / Pack</th>
+                    <th>Taken / Day</th>
+                    <th>Daily Dosage</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <% if (drugs && drugs.length) { %>
+                    <% for (let i = 0; i < drugs.length; i++) { const d = drugs[i]; %>
+                        <tr data-row-id="<%= d._id %>" style="text-align:center;">
+                            <td style="padding:10px;">
+                                <%= i + 1 %>
+                            </td>
+                            <td>
+                                <%= d.name %>
+                            </td>
+                            <td>
+                                <%= d.card %>
+                            </td>
+                            <td>
+                                <%= d.pack %>
+                            </td>
+                            <td>
+                                <%= d.perDay %>
+                            </td>
+                            <td>
+                                <%= d.dosage %>
+                            </td>
+                            <td class="actions" style="padding:10px;">
+                                <a href="/update-drug?id=<%= d._id %>" title="Edit" style="
+                                margin-right:8px;
+                                color:#007bff;
+                                font-size:18px;
+                            ">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <button class="delete-btn" data-id="<%= d._id %>" title="Delete" style="background:none;border:none;cursor:pointer;color:#dc3545;font-size:18px;">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            </td>
+                        </tr>
+                        <% } %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="7" style="text-align:center; padding:20px; color:#666;">
+                                        🚫 Chưa có thuốc nào. Nhấn <strong>New Drug</strong> để thêm mới.
+                                    </td>
+                                </tr>
+                                <% } %>
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Delete via fetch
+        document.addEventListener('click', async(e) => {
+            const btn = e.target.closest('.delete-btn');
+            if (!btn) return;
+
+            const id = btn.getAttribute('data-id');
+            if (!id) return;
+
+            if (!confirm('❌ Bạn có chắc chắn muốn xóa thuốc này?')) return;
+
+            try {
+                const res = await fetch(`/drugs/${id}`, {
+                    method: 'DELETE'
+                });
+                if (!res.ok) {
+                    const text = await res.text();
+                    alert('Xóa thất bại: ' + text);
+                    return;
+                }
+                const row = document.querySelector(`tr[data-row-id="${id}"]`);
+                if (row) row.remove();
+                alert('✅ Xóa thành công!');
+            } catch (err) {
+                alert('Lỗi mạng: ' + err.message);
+            }
+        });
+    </script>
+
+    <!-- footer -->
+    <%- include('includes/_footer') %>

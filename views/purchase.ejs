@@ -1,0 +1,99 @@
+<!-- add header -->
+<%- include('includes/_header') %>
+    <!-- end header -->
+
+    <main id="main">
+        <h2>Calculate drugs to purchase</h2>
+
+        <p>For how many days do you want to purchase drugs?</p>
+        <form id="drug_days">
+            <input type="number" id="days" name="days" min="1" max="365" value="30" required>
+            <button type="submit">Enter</button>
+        </form>
+
+        <table id="purchase_table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Drug Name</th>
+                    <th>Cards to Buy</th>
+                    <th>Packs to Buy</th>
+                </tr>
+            </thead>
+            <tbody id="purchase_tbody">
+                <!-- hàng sẽ được render bằng JS -->
+            </tbody>
+        </table>
+    </main>
+
+    <script>
+        // Lấy dữ liệu cần thiết từ server (giảm thiểu field)
+        const data = DRUGS.map((d, idx) => ({
+            idx: idx + 1,
+            id: String(d._id || ''),
+            name: d.name,
+            card: Number(d.card),
+            pack: Number(d.pack),
+            perDay: Number(d.perDay)
+        }));
+
+
+        const tbody = document.getElementById('purchase_tbody');
+        const form = document.getElementById('drug_days');
+        const daysInput = document.getElementById('days');
+
+        function pluralize(n, s) {
+            return n === 1 ? s : s + 's';
+        }
+
+        function render(days) {
+            tbody.innerHTML = '';
+
+            DRUGS.forEach(d => {
+                // tổng số viên cần cho 'days'
+                const pillsNeeded = days * d.perDay;
+
+                // số card cần mua (làm tròn lên)
+                const cardsToBuy = Math.ceil(pillsNeeded / d.card);
+
+                // số pack cần mua (làm tròn lên)
+                const packsToBuy = Math.ceil(pillsNeeded / d.pack);
+
+                // số card trong 1 pack (để hiển thị chú thích). Có thể không nguyên -> format 2 số thập phân
+                const cardsPerPack = d.pack / d.card;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+        <td>${d.idx}</td>
+        <td>${d.name}</td>
+        <td>
+          ${cardsToBuy}
+          <span style="color:#666;font-size:.9em">
+            (${cardsPerPack % 1 === 0 ? cardsPerPack : cardsPerPack.toFixed(2)}
+            ${pluralize(Math.round(cardsPerPack) === 1 ? 1 : 2, 'card')} per pack)
+          </span>
+        </td>
+        <td>${packsToBuy}</td>
+      `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // render lần đầu với giá trị mặc định
+        render(Number(daysInput.value) || 30);
+
+        // submit form -> tính lại
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const days = Number(daysInput.value);
+            if (!Number.isFinite(days) || days < 1) {
+                alert('Days must be a positive number.');
+                return;
+            }
+            render(days);
+        });
+    </script>
+
+    <!-- add footer -->
+    <%- include('includes/_footer') %>
+        <!-- end footer -->

@@ -1,0 +1,57 @@
+<!-- add header -->
+<%- include('includes/_header', { title: 'View Daily Drug Dosage' }) %>
+    <!-- end header -->
+
+    <main id="main" class="container">
+        <h2 class="page-title">📋 View Daily Drug Dosage</h2>
+        <div class="row">
+            <!-- Left info -->
+            <div class="col-lg-3 col-sm-12 info-box">
+                <img src="" class="img-fluid rounded shadow">
+                <p class="note">
+                    White = Morning <br> Purple = Afternoon <br> Deep Blue = Night
+                </p>
+            </div>
+
+            <!-- Right table -->
+            <div class="col-lg-9 col-sm-12">
+                <table class="drug-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Drug Name</th>
+                            <th>Daily Dosage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(drugs.length === 0) { %>
+                            <tr>
+                                <td colspan="3" class="empty">No drug records found</td>
+                            </tr>
+                            <% } else { %>
+                                <% for(let i = 0; i < drugs.length; i++) { %>
+                                    <tr>
+                                        <td>
+                                            <%= i + 1 %>
+                                        </td>
+                                        <td>
+                                            <%= drugs[i].name %>
+                                        </td>
+                                        <td>
+                                            <% let parts = drugs[i].dosage.split(","); %>
+                                                <span class="badge morning">🌅 <%= parts[0].split("-")[0] %> tablets</span><br>
+                                                <span class="badge afternoon">☀️ <%= parts[1].split("-")[0] %> tablets</span><br>
+                                                <span class="badge night">🌙 <%= parts[2].split("-")[0] %> tablets</span>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- add footer -->
+    <%- include('includes/_footer') %>
+        <!-- end footer -->
